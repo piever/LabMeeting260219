@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+  </head>
+  <body>
+    <textarea id="source">
+
+class: middle, centre
+
+
+
+
+# Open source tools for working with data
+
+
+---
+
+
+
+
+# Introduction
+
+
+Open source software development for research:
+
+
+--
+
+
+  * Efficient format for tabular data
+
+
+--
+
+
+  * Metaprogramming tools for tabular data manipulations
+
+
+--
+
+
+  * Plotting facility for tabular data (esp. grouped data)
+
+
+--
+
+
+  * Custom array storage type to incorporate photometry or recordings in tables
+
+
+--
+
+
+  * Toolkit to build web apps and specialized widgets for table manipulations
+
+
+---
+
+
+
+
+# Background: the Julia programming language
+
+
+--
+
+
+  * JIT compiled language: type stable code runs at C-like speed
+
+
+--
+
+
+  * rich type system allows for fast custom data structures
+
+
+--
+
+
+  * multiple dispatch makes custom data structures easy to use
+
+
+--
+
+
+  * metaprogramming
+
+
+---
+
+
+
+
+# StructArrays: flexibly switching from row-based to column-based
+
+
+```julia
+s = StructArray(a=1:3, b=["x", "y", "z"])
+s[1]
+```
+
+```
+(a = 1, b = "x")
+```
+
+
+```julia
+s.a
+```
+
+```
+1:3
+```
+
+
+```julia
+map(row -> exp(row.a), s)
+```
+
+```
+3-element Array{Float64,1}:
+  2.718281828459045
+  7.38905609893065
+ 20.085536923187668
+```
+
+
+---
+
+
+
+
+# JuliaDB
+
+
+```julia
+iris = loadtable("/home/pietro/Data/examples/iris.csv")
+```
+
+```
+Table with 150 rows, 5 columns:
+SepalLength  SepalWidth  PetalLength  PetalWidth  Species
+─────────────────────────────────────────────────────────────
+5.1          3.5         1.4          0.2         "setosa"
+4.9          3.0         1.4          0.2         "setosa"
+4.7          3.2         1.3          0.2         "setosa"
+4.6          3.1         1.5          0.2         "setosa"
+5.0          3.6         1.4          0.2         "setosa"
+5.4          3.9         1.7          0.4         "setosa"
+4.6          3.4         1.4          0.3         "setosa"
+5.0          3.4         1.5          0.2         "setosa"
+4.4          2.9         1.4          0.2         "setosa"
+⋮
+5.8          2.7         5.1          1.9         "virginica"
+6.8          3.2         5.9          2.3         "virginica"
+6.7          3.3         5.7          2.5         "virginica"
+6.7          3.0         5.2          2.3         "virginica"
+6.3          2.5         5.0          1.9         "virginica"
+6.5          3.0         5.2          2.0         "virginica"
+6.2          3.4         5.4          2.3         "virginica"
+5.9          3.0         5.1          1.8         "virginica"
+```
+
+
+---
+
+
+
+
+# JuliaDB: working with columns
+
+
+The package JuliaDBMeta provides a set of macros to work on tables (implemented under the hood as StructArrays). It implements normal tabular data operations (map, filter, join, groupby, etc...) but uses metaprogramming to allow the user to use symbols as if they were columns:
+
+
+```julia
+@with iris mean(:SepalLength) / mean(:SepalWidth)
+```
+
+```
+1.9112516354121238
+```
+
+
+---
+
+
+
+
+# JuliaDB: working with rows
+
+
+```julia
+@apply iris begin
+    @transform (Ratio = :SepalLength / :SepalWidth, Large = :PetalWidth > 2)
+    @filter :Ratio > 2 && :Species != "versicolor"
+end
+```
+
+```
+Table with 41 rows, 7 columns:
+SepalLength  SepalWidth  PetalLength  PetalWidth  Species      Ratio    Large
+─────────────────────────────────────────────────────────────────────────────
+5.8          2.7         5.1          1.9         "virginica"  2.14815  false
+7.1          3.0         5.9          2.1         "virginica"  2.36667  true
+6.3          2.9         5.6          1.8         "virginica"  2.17241  false
+6.5          3.0         5.8          2.2         "virginica"  2.16667  true
+7.6          3.0         6.6          2.1         "virginica"  2.53333  true
+7.3          2.9         6.3          1.8         "virginica"  2.51724  false
+6.7          2.5         5.8          1.8         "virginica"  2.68     false
+6.5          3.2         5.1          2.0         "virginica"  2.03125  false
+6.4          2.7         5.3          1.9         "virginica"  2.37037  false
+⋮
+6.7          3.1         5.6          2.4         "virginica"  2.16129  true
+6.9          3.1         5.1          2.3         "virginica"  2.22581  true
+5.8          2.7         5.1          1.9         "virginica"  2.14815  false
+6.8          3.2         5.9          2.3         "virginica"  2.125    true
+6.7          3.3         5.7          2.5         "virginica"  2.0303   true
+6.7          3.0         5.2          2.3         "virginica"  2.23333  true
+6.3          2.5         5.0          1.9         "virginica"  2.52     false
+6.5          3.0         5.2          2.0         "virginica"  2.16667  false
+```
+
+
+---
+
+
+
+
+# Adding neural data to a table: ShiftedArrays
+
+
+While working with tables is obviously useful for behavioral data, it is less clear how neural data fits into the picture.
+
+
+--
+
+
+The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
+
+
+--
+
+
+```julia
+v = rand(10)
+lead(v, 3)
+```
+
+```
+10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
+ 0.6800770421276146
+ 0.2690821936141705
+ 0.43408163747935924
+ 0.8469296324283979
+ 0.37455159978683383
+ 0.12173803169712105
+ 0.09107514030607167
+  missing
+  missing
+  missing
+```
+
+
+---
+
+
+
+
+# Adding neural data to a table: ShiftedArrays
+
+
+The underlying data is shared, so creating a `ShiftedArray` is very cheap:
+
+
+```julia
+v = rand(1_000_000)
+@benchmark lead($v, 100)
+```
+
+```
+BenchmarkTools.Trial:
+  memory estimate:  32 bytes
+  allocs estimate:  1
+  --------------
+  minimum time:     4.450 ns (0.00% GC)
+  median time:      5.383 ns (0.00% GC)
+  mean time:        8.779 ns (35.37% GC)
+  maximum time:     2.436 μs (99.59% GC)
+  --------------
+  samples:          10000
+  evals/sample:     1000
+```
+
+
+---
+
+
+
+
+# Adding neural data to a table: ShiftedArrays
+
+
+A new column can be added by simply putting shifted copies of the recordings:
+
+
+```julia
+photometry = rand(100)
+timestamps = [12, 23, 48, 97]
+shiftedvecs = [lead(photometry, time) for time in timestamps]
+ShiftedArrays.to_array(shiftedvecs, -5:5)
+```
+
+```
+11×4 Array{Union{Missing, Float64},2}:
+ 0.972879   0.874658  0.333947   0.419198
+ 0.33713    0.890791  0.845748   0.156055
+ 0.276445   0.45509   0.751644   0.815155
+ 0.60635    0.881814  0.0537092  0.529981
+ 0.830627   0.338535  0.620786   0.692025
+ 0.0535036  0.413344  0.384029   0.510463
+ 0.139846   0.771393  0.590959   0.849935
+ 0.764203   0.857646  0.629482   0.931432
+ 0.583635   0.745774  0.674891   0.580546
+ 0.280868   0.939404  0.0551585   missing
+ 0.228525   0.364278  0.134236    missing
+```
+
+
+---
+
+
+
+
+# Adding neural data to a table: ShiftedArrays
+
+
+ShiftedArrays also provides utility function to reduce the data:
+
+
+```julia
+reduce_vec(mean, shiftedvecs, -5:5)
+```
+
+```
+11-element Array{Float64,1}:
+ 0.6501704328620608
+ 0.5574309221908123
+ 0.5745834117308344
+ 0.5179636385121391
+ 0.6204932193136283
+ 0.34033493935187514
+ 0.5880332709172572
+ 0.7956905633051852
+ 0.6462113544010815
+ 0.4251433359169776
+ 0.2423460775971955
+```
+
+
+---
+
+    </textarea>
+
+    <script src="remark.min.js" type="text/javascript"></script>
+    <script src="katex.min.js"></script>
+    <script src="auto-render.min.js"></script>
+    <link rel="stylesheet" href="katex.min.css">
+    <script type="text/javascript">
+        var options = {};
+        var renderMath = function() {
+        // renderMathInElement(document.body);
+        // or if you want to use $...$ for math,
+        renderMathInElement(document.body, {delimiters: [ // mind the order of delimiters(!?)
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false},
+            {left: "\\[", right: "\\]", display: true},
+            {left: "\\(", right: "\\)", display: false},
+        ]});
+        }
+
+        var slideshow = remark.create({}, renderMath);
+
+        </script>
+  </body>
+</html>
