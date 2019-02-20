@@ -76,7 +76,7 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 --
 
 ```@example 2
-@groupby iris :Species (MeanLength = mean(:SepalLength), STDWidth = std(:SepalWidth))
+@groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
 ```
 
 ---
@@ -122,7 +122,7 @@ using GroupedErrors
     @across _.School
     @x _.MAch
     @y :cumulative
-    @plot
+    @plot plot(xlabel = "MAch", ylabel = "CDF")
 end
 ```
 ![](../cumulative.svg)
@@ -183,4 +183,63 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ---
 
-# Interactivity 
+# Plotting support provided by GroupedErrors
+
+```julia
+@> dfs begin
+    @splitby _.treatment
+    @across _.subject
+    @x -100:100 :discrete
+    @y _.signal
+    @plot plot() :ribbon
+end
+```
+
+![](../photometry.svg)
+
+---
+
+### Widgets
+
+```julia
+color = colorpicker()
+npoints = slider(10:100, label = "npoints")
+markersize = slider(3:10, label = "markersize")
+label = textbox("insert legend entry")
+plt = Observables.@map scatter(
+    rand(&npoints), rand(&npoints),
+    color = &color,
+    markersize = &markersize,
+    label = &label
+)
+```
+
+--
+
+
+### Layout:
+
+
+```julia
+ui = vbox(
+    color,
+    npoints,
+    markersize,
+    label,
+    plt
+)
+```
+
+---
+
+# Interactivity
+
+```julia
+filename = filepicker()
+t = map(loadtable, filename)
+filtered_data = selectors(t)
+edited_data = data_editor(filtered_data)
+
+spreadsheet = 
+viewer = dataviewer(edit_data)
+```

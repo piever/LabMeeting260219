@@ -7,27 +7,27 @@ class: middle, centre
 
 Open source software development for research:
 
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - Efficient format for tabular data
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - User-friendly tools for tabular data manipulations
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - Plotting facilities for tabular data (esp. grouped data)
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - Custom array storage type to incorporate photometry or recordings in tables
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - Toolkit to build web apps and specialized widgets for table manipulations and data flow
 
 ---
 
 # Background: the Julia programming language
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - Modern, open-source, free programming language
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - Easy interactive use (REPL, little boilerplate) but good performance
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - rich type system and multiple dispatch allow for fast custom data structures
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 - metaprogramming: Julia can modify its own code before running it, which allows intuitive interfaces
 
 ---
@@ -40,13 +40,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -73,10 +73,10 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 
 ```@example 2
-@groupby iris :Species (MeanLength = mean(:SepalLength), STDWidth = std(:SepalWidth))
+@groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
 ```
 
 ---
@@ -122,7 +122,7 @@ using GroupedErrors
     @across _.School
     @x _.MAch
     @y :cumulative
-    @plot
+    @plot plot(xlabel = "MAch", ylabel = "CDF")
 end
 ```
 ![](../cumulative.svg)
@@ -133,11 +133,11 @@ end
 
 While working with tables is obviously useful for behavioral data, it is less clear how neural data fits into the picture.
 
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-ecxhpecglddrnctolpwyvkwemgydpantkpbbktclgewsttcbql
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
 
 ```@example 3
 using Statistics #hide
@@ -183,4 +183,63 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ---
 
-# Interactivity 
+# Plotting support provided by GroupedErrors
+
+```julia
+@> dfs begin
+    @splitby _.treatment
+    @across _.subject
+    @x -100:100 :discrete
+    @y _.signal
+    @plot plot() :ribbon
+end
+```
+
+![](../photometry.svg)
+
+---
+
+### Widgets
+
+```julia
+color = colorpicker()
+npoints = slider(10:100, label = "npoints")
+markersize = slider(3:10, label = "markersize")
+label = textbox("insert legend entry")
+plt = Observables.@map scatter(
+    rand(&npoints), rand(&npoints),
+    color = &color,
+    markersize = &markersize,
+    label = &label
+)
+```
+
+hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+
+
+### Layout:
+
+
+```julia
+ui = vbox(
+    color,
+    npoints,
+    markersize,
+    label,
+    plt
+)
+```
+
+---
+
+# Interactivity
+
+```julia
+filename = filepicker()
+t = map(loadtable, filename)
+filtered_data = selectors(t)
+edited_data = data_editor(filtered_data)
+
+spreadsheet = 
+viewer = dataviewer(edit_data)
+```
