@@ -36,13 +36,13 @@ Open source software development for research:
 --
 
 
-  * Metaprogramming tools for tabular data manipulations
+  * User-friendly tools for tabular data manipulations
 
 
 --
 
 
-  * Plotting facility for tabular data (esp. grouped data)
+  * Plotting facilities for tabular data (esp. grouped data)
 
 
 --
@@ -54,7 +54,7 @@ Open source software development for research:
 --
 
 
-  * Toolkit to build web apps and specialized widgets for table manipulations
+  * Toolkit to build web apps and specialized widgets for table manipulations and data flow
 
 
 ---
@@ -68,25 +68,25 @@ Open source software development for research:
 --
 
 
-  * JIT compiled language: type stable code runs at C-like speed
+  * Modern, open-source, free programming language
 
 
 --
 
 
-  * rich type system allows for fast custom data structures
+  * Easy interactive use (REPL, little boilerplate) but good performance
 
 
 --
 
 
-  * multiple dispatch makes custom data structures easy to use
+  * rich type system and multiple dispatch allow for fast custom data structures
 
 
 --
 
 
-  * metaprogramming
+  * metaprogramming: Julia can modify its own code before running it, which allows intuitive interfaces
 
 
 ---
@@ -98,8 +98,9 @@ Open source software development for research:
 
 
 ```julia
+using StructArrays
 s = StructArray(a=1:3, b=["x", "y", "z"])
-s[1]
+s[1] # Behaves like an array of structures
 ```
 
 ```
@@ -107,17 +108,11 @@ s[1]
 ```
 
 
-```julia
-s.a
-```
-
-```
-1:3
-```
+--
 
 
 ```julia
-map(row -> exp(row.a), s)
+map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
 ```
@@ -128,15 +123,28 @@ map(row -> exp(row.a), s)
 ```
 
 
+--
+
+
+```julia
+fieldarrays(s) # Data is stored as columns
+```
+
+```
+(a = 1:3, b = ["x", "y", "z"])
+```
+
+
 ---
 
 
 
 
-# JuliaDB
+# Working with tabular data
 
 
 ```julia
+using JuliaDBMeta
 iris = loadtable("/home/pietro/Data/examples/iris.csv")
 ```
 
@@ -170,10 +178,10 @@ SepalLength  SepalWidth  PetalLength  PetalWidth  Species
 
 
 
-# JuliaDB: working with columns
+# Working with columns
 
 
-The package JuliaDBMeta provides a set of macros to work on tables (implemented under the hood as StructArrays). It implements normal tabular data operations (map, filter, join, groupby, etc...) but uses metaprogramming to allow the user to use symbols as if they were columns:
+External packages implement normal tabular data operations on `StructArrays` (map, filter, join, groupby, etc...) as well as macros fo uses metaprogramming to allow the user to use symbols as if they were columns:
 
 
 ```julia
@@ -185,12 +193,29 @@ The package JuliaDBMeta provides a set of macros to work on tables (implemented 
 ```
 
 
+--
+
+
+```julia
+@groupby iris :Species (MeanLength = mean(:SepalLength), STDWidth = std(:SepalWidth))
+```
+
+```
+Table with 3 rows, 3 columns:
+Species       MeanLength  STDWidth
+──────────────────────────────────
+"setosa"      5.006       0.379064
+"versicolor"  5.936       0.313798
+"virginica"   6.588       0.322497
+```
+
+
 ---
 
 
 
 
-# JuliaDB: working with rows
+# Working with rows
 
 
 ```julia
@@ -230,6 +255,86 @@ SepalLength  SepalWidth  PetalLength  PetalWidth  Species      Ratio    Large
 
 
 
+# Plotting can be part of the pipeline
+
+
+```julia
+using StatsPlots
+@apply iris begin
+    @transform (Ratio = :SepalLength/:SepalWidth, Sum = :SepalLength+:SepalWidth)
+    @df corrplot([:Ratio :Sum])
+end
+```
+
+
+![](../corrplot.svg)
+
+
+---
+
+
+
+
+# Plotting grouped data
+
+
+```julia
+school = loadtable("/home/pietro/Data/examples/school.csv")
+```
+
+```
+Table with 7185 rows, 8 columns:
+School  Minrty  Sx        SSS     MAch    MeanSES    Sector      CSES
+──────────────────────────────────────────────────────────────────────────
+1224    "No"    "Female"  -1.528  5.876   -0.434383  "Public"    -1.09362
+1224    "No"    "Female"  -0.588  19.708  -0.434383  "Public"    -0.153617
+1224    "No"    "Male"    -0.528  20.349  -0.434383  "Public"    -0.093617
+1224    "No"    "Male"    -0.668  8.781   -0.434383  "Public"    -0.233617
+1224    "No"    "Male"    -0.158  17.898  -0.434383  "Public"    0.276383
+1224    "No"    "Male"    0.022   4.583   -0.434383  "Public"    0.456383
+1224    "No"    "Female"  -0.618  -2.832  -0.434383  "Public"    -0.183617
+1224    "No"    "Male"    -0.998  0.523   -0.434383  "Public"    -0.563617
+1224    "No"    "Female"  -0.888  1.527   -0.434383  "Public"    -0.453617
+⋮
+9586    "No"    "Female"  1.212   15.26   0.621153   "Catholic"  0.590847
+9586    "No"    "Female"  1.022   22.78   0.621153   "Catholic"  0.400847
+9586    "Yes"   "Female"  1.612   20.967  0.621153   "Catholic"  0.990847
+9586    "No"    "Female"  1.512   20.402  0.621153   "Catholic"  0.890847
+9586    "No"    "Female"  -0.038  14.794  0.621153   "Catholic"  -0.659153
+9586    "No"    "Female"  1.332   19.641  0.621153   "Catholic"  0.710847
+9586    "No"    "Female"  -0.008  16.241  0.621153   "Catholic"  -0.629153
+9586    "No"    "Female"  0.792   22.733  0.621153   "Catholic"  0.170847
+```
+
+
+---
+
+
+
+
+# Plotting grouped data
+
+
+```julia
+using GroupedErrors
+@> school begin
+    @splitby _.Sx
+    @across _.School
+    @x _.MAch
+    @y :cumulative
+    @plot
+end
+```
+
+
+![](../cumulative.svg)
+
+
+---
+
+
+
+
 # Adding neural data to a table: ShiftedArrays
 
 
@@ -246,19 +351,20 @@ The package ShiftedArrays addresses this issue by creating a custom array type w
 
 
 ```julia
+using ShiftedArrays
 v = rand(10)
 lead(v, 3)
 ```
 
 ```
 10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
- 0.6800770421276146
- 0.2690821936141705
- 0.43408163747935924
- 0.8469296324283979
- 0.37455159978683383
- 0.12173803169712105
- 0.09107514030607167
+ 0.05060659946942336
+ 0.022794921911552857
+ 0.7865617946291894
+ 0.8780154873851918
+ 0.8322371062445617
+ 0.6587203746539094
+ 0.7326056277712953
   missing
   missing
   missing
@@ -278,7 +384,7 @@ The underlying data is shared, so creating a `ShiftedArray` is very cheap:
 
 ```julia
 v = rand(1_000_000)
-@benchmark lead($v, 100)
+@benchmark lead(v, 100)
 ```
 
 ```
@@ -286,13 +392,13 @@ BenchmarkTools.Trial:
   memory estimate:  32 bytes
   allocs estimate:  1
   --------------
-  minimum time:     4.450 ns (0.00% GC)
-  median time:      5.383 ns (0.00% GC)
-  mean time:        8.779 ns (35.37% GC)
-  maximum time:     2.436 μs (99.59% GC)
+  minimum time:     24.064 ns (0.00% GC)
+  median time:      25.220 ns (0.00% GC)
+  mean time:        30.755 ns (11.06% GC)
+  maximum time:     2.835 μs (98.84% GC)
   --------------
   samples:          10000
-  evals/sample:     1000
+  evals/sample:     996
 ```
 
 
@@ -316,17 +422,17 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ```
 11×4 Array{Union{Missing, Float64},2}:
- 0.972879   0.874658  0.333947   0.419198
- 0.33713    0.890791  0.845748   0.156055
- 0.276445   0.45509   0.751644   0.815155
- 0.60635    0.881814  0.0537092  0.529981
- 0.830627   0.338535  0.620786   0.692025
- 0.0535036  0.413344  0.384029   0.510463
- 0.139846   0.771393  0.590959   0.849935
- 0.764203   0.857646  0.629482   0.931432
- 0.583635   0.745774  0.674891   0.580546
- 0.280868   0.939404  0.0551585   missing
- 0.228525   0.364278  0.134236    missing
+ 0.701554   0.716368    0.769628  0.894776
+ 0.224977   0.71248     0.913185  0.126157
+ 0.990712   0.783473    0.710961  0.808728
+ 0.186307   0.234799    0.807176  0.591962
+ 0.826908   0.088848    0.221313  0.969292
+ 0.671001   0.508403    0.509015  0.0256498
+ 0.434603   0.00414407  0.385147  0.724821
+ 0.9575     0.472168    0.263606  0.212395
+ 0.994429   0.724176    0.242319  0.547438
+ 0.976687   0.864453    0.510552   missing
+ 0.0108191  0.0420381   0.654114   missing
 ```
 
 
@@ -347,21 +453,26 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ```
 11-element Array{Float64,1}:
- 0.6501704328620608
- 0.5574309221908123
- 0.5745834117308344
- 0.5179636385121391
- 0.6204932193136283
- 0.34033493935187514
- 0.5880332709172572
- 0.7956905633051852
- 0.6462113544010815
- 0.4251433359169776
- 0.2423460775971955
+ 0.7705814685581874
+ 0.4941999710674276
+ 0.8234684344479352
+ 0.45506111316338427
+ 0.5265902378149467
+ 0.4285171950407783
+ 0.38717879780569087
+ 0.4764171898195179
+ 0.6270904541188115
+ 0.7838972927256759
+ 0.23565692659459567
 ```
 
 
 ---
+
+
+
+
+# Interactivity
 
     </textarea>
 

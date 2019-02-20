@@ -10,67 +10,78 @@ Open source software development for research:
 --
 - Efficient format for tabular data
 --
-- Metaprogramming tools for tabular data manipulations
+- User-friendly tools for tabular data manipulations
 --
-- Plotting facility for tabular data (esp. grouped data)
+- Plotting facilities for tabular data (esp. grouped data)
 --
 - Custom array storage type to incorporate photometry or recordings in tables
 --
-- Toolkit to build web apps and specialized widgets for table manipulations
+- Toolkit to build web apps and specialized widgets for table manipulations and data flow
 
 ---
 
 # Background: the Julia programming language
 --
-- JIT compiled language: type stable code runs at C-like speed
+- Modern, open-source, free programming language
 --
-- rich type system allows for fast custom data structures
+- Easy interactive use (REPL, little boilerplate) but good performance
 --
-- multiple dispatch makes custom data structures easy to use
+- rich type system and multiple dispatch allow for fast custom data structures
 --
-- metaprogramming
+- metaprogramming: Julia can modify its own code before running it, which allows intuitive interfaces
 
 ---
 
 # StructArrays: flexibly switching from row-based to column-based
 
 ```@example 1
-using StructArrays # hide
+using StructArrays
 s = StructArray(a=1:3, b=["x", "y", "z"])
-s[1]
+s[1] # Behaves like an array of structures
 ```
 
-```@example 1
-s.a
-```
+--
 
 ```@example 1
-map(row -> exp(row.a), s)
+map(row -> exp(row.a), s) # Behaves like an array of structures
+```
+
+--
+
+```@example 1
+fieldarrays(s) # Data is stored as columns
 ```
 
 ---
 
-# JuliaDB
+# Working with tabular data
 
 ```@example 2
-using JuliaDBMeta, Statistics # hide
+using Statistics # hide
+using JuliaDBMeta
 iris = loadtable("/home/pietro/Data/examples/iris.csv")
 ```
 
 
 --- 
 
-# JuliaDB: working with columns
+# Working with columns
 
-The package JuliaDBMeta provides a set of macros to work on tables (implemented under the hood as StructArrays). It implements normal tabular data operations (map, filter, join, groupby, etc...) but uses metaprogramming to allow the user to use symbols as if they were columns:
+External packages implement normal tabular data operations on `StructArrays` (map, filter, join, groupby, etc...) as well as macros fo uses metaprogramming to allow the user to use symbols as if they were columns:
 
 ```@example 2
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
+--
+
+```@example 2
+@groupby iris :Species (MeanLength = mean(:SepalLength), STDWidth = std(:SepalWidth))
+```
+
 ---
 
-# JuliaDB: working with rows
+# Working with rows
 
 ```@example 2
 @apply iris begin
@@ -78,6 +89,43 @@ The package JuliaDBMeta provides a set of macros to work on tables (implemented 
     @filter :Ratio > 2 && :Species != "versicolor"
 end
 ```
+
+---
+
+# Plotting can be part of the pipeline
+
+```julia
+using StatsPlots
+@apply iris begin
+    @transform (Ratio = :SepalLength/:SepalWidth, Sum = :SepalLength+:SepalWidth)
+    @df corrplot([:Ratio :Sum])
+end
+```
+![](../corrplot.svg)
+
+---
+
+# Plotting grouped data
+
+```@example 2
+school = loadtable("/home/pietro/Data/examples/school.csv")
+```
+
+---
+
+# Plotting grouped data
+
+```julia
+using GroupedErrors
+@> school begin
+    @splitby _.Sx
+    @across _.School
+    @x _.MAch
+    @y :cumulative
+    @plot
+end
+```
+![](../cumulative.svg)
 
 ---
 
@@ -92,7 +140,8 @@ The package ShiftedArrays addresses this issue by creating a custom array type w
 --
 
 ```@example 3
-using ShiftedArrays, Statistics #hide
+using Statistics #hide
+using ShiftedArrays 
 v = rand(10)
 lead(v, 3)
 ```
@@ -106,7 +155,7 @@ The underlying data is shared, so creating a `ShiftedArray` is very cheap:
 ```@example 3
 using BenchmarkTools # hide
 v = rand(1_000_000)
-@benchmark lead($v, 100)
+@benchmark lead(v, 100)
 ```
 
 ---
@@ -134,3 +183,4 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ---
 
+# Interactivity 
