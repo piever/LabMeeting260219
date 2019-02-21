@@ -96,7 +96,7 @@ iris = loadtable("/home/pietro/Data/examples/iris.csv")
 
 # Working with columns
 
-External packages implement normal tabular data operations on `StructArrays` (map, filter, join, groupby, etc...) as well as macros fo uses metaprogramming to allow the user to use symbols as if they were columns:
+External packages implement normal tabular data operations on `StructArrays` (map, filter, join, groupby, etc...) as well as macros to use symbols as if they were columns:
 
 ```@example 2
 @with iris mean(:SepalLength) / mean(:SepalWidth)
@@ -272,3 +272,21 @@ edited_data = data_editor(filtered_data)
 spreadsheet =
 viewer = dataviewer(edit_data)
 ```
+
+---
+
+# References
+
+[StructArrays](https://github.com/piever/StructArrays.jl)
+
+[JuliaDBMeta](https://piever.github.io/JuliaDBMeta.jl/latest/)
+
+[StatsPlots](https://github.com/JuliaPlots/StatsPlots.jl)
+
+[GroupedErrors](https://github.com/piever/GroupedErrors.jl)
+
+[ShiftedArrays](https://github.com/piever/ShiftedArrays.jl)
+
+[Interact](https://github.com/JuliaGizmos/Interact.jl)
+
+[TableWidgets](https://github.com/piever/TableWidgets.jl)

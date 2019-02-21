@@ -7,27 +7,27 @@ class: middle, centre
 
 Open source software development for research:
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Efficient format for tabular data
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - User-friendly tools for tabular data manipulations
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Plotting facilities for tabular data (esp. grouped data)
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Custom array type to incorporate photometry or recordings in tables
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Toolkit to build web apps following "data flow"
 
 ---
 
 # The Julia programming language
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Modern, open-source and free programming language
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Easy to use (interactive console, little "boilerplate") but good performance
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Rich type system and multiple dispatch allow for fast custom data structures
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 - Metaprogramming: Julia can modify its own code before running it
 
 ---
@@ -40,13 +40,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -56,7 +56,7 @@ fieldarrays(s) # Data is stored as columns
 
 # StructArrays: technical highlights
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 - Arbitrary column array types are supported:
     - distributed arrays for parallel computing on a cluster
@@ -69,7 +69,7 @@ b = CuArray(rand(Bool, 10))
 StructArray(a = a, b = b)
 ```
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 -  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
 ```@example
@@ -96,13 +96,13 @@ iris = loadtable("/home/pietro/Data/examples/iris.csv")
 
 # Working with columns
 
-External packages implement normal tabular data operations on `StructArrays` (map, filter, join, groupby, etc...) as well as macros fo uses metaprogramming to allow the user to use symbols as if they were columns:
+External packages implement normal tabular data operations on `StructArrays` (map, filter, join, groupby, etc...) as well as macros to use symbols as if they were columns:
 
 ```@example 2
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
@@ -162,11 +162,11 @@ end
 
 While working with tables is obviously useful for behavioral data, it is less clear how neural data fits into the picture.
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 ```@example 3
 using Statistics #hide
@@ -243,7 +243,7 @@ plt = Observables.@map scatter(
 )
 ```
 
-dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+rifvjeghzbntogaisctqizehwwanjdrxrupftxyahbcfzjubjg
 
 
 ### Layout:
@@ -272,3 +272,21 @@ edited_data = data_editor(filtered_data)
 spreadsheet =
 viewer = dataviewer(edit_data)
 ```
+
+---
+
+# References
+
+[StructArrays](https://github.com/piever/StructArrays.jl)
+
+[JuliaDBMeta](https://piever.github.io/JuliaDBMeta.jl/latest/)
+
+[StatsPlots](https://github.com/JuliaPlots/StatsPlots.jl)
+
+[GroupedErrors](https://github.com/piever/GroupedErrors.jl)
+
+[ShiftedArrays](https://github.com/piever/ShiftedArrays.jl)
+
+[Interact](https://github.com/JuliaGizmos/Interact.jl)
+
+[TableWidgets](https://github.com/piever/TableWidgets.jl)
