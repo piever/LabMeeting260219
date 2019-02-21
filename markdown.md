@@ -62,6 +62,8 @@ fieldarrays(s) # Data is stored as columns
     - distributed arrays for parallel computing on a cluster
     - cuda arrays to run operations on cuda kernels
 
+--
+
 ```julia
 using CuArrays
 a = CuArray(rand(Float32, 10))
@@ -71,6 +73,8 @@ StructArray(a = a, b = b)
 
 --
 -  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+
+--
 
 ```@example
 using StructArrays, BenchmarkTools #hide
@@ -160,7 +164,9 @@ end
 
 # Adding neural data to a table: ShiftedArrays
 
-While working with tables is obviously useful for behavioral data, it is less clear how neural data fits into the picture.
+In a typical dataset, recordings and behavior are mismatched:
+- Behavioral data => hundreds of rows (trials)
+- Neural data => hundreds of thousands of frames (photometry)
 
 --
 
@@ -215,7 +221,7 @@ reduce_vec(mean, shiftedvecs, -5:5)
 # Plotting support provided by GroupedErrors
 
 ```julia
-@> dfs begin
+@> df begin
     @splitby _.treatment
     @across _.subject
     @x -100:100 :discrete
@@ -228,7 +234,7 @@ end
 
 ---
 
-### Widgets
+### UI logic
 
 ```julia
 color = colorpicker()
@@ -245,7 +251,6 @@ plt = Observables.@map scatter(
 
 --
 
-
 ### Layout:
 
 
@@ -261,7 +266,7 @@ ui = vbox(
 
 ---
 
-# Interactivity
+# Interactive data pipeline
 
 ```julia
 filename = filepicker()
@@ -274,6 +279,33 @@ viewer = dataviewer(edit_data)
 ```
 
 ---
+
+# Future direction: increased UI responsiveness and Interactivity
+
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) is compatible with time-varying signals: responsive interfaces where signals are shared between the plot and the UI controls.
+
+--
+
+Disclaimer: I've ported the StatsPlots package to StatsMakie but there is still some quirks to iron out before I can switch to using it exclusively.
+
+---
+
+# Eye catching demos (in house): Makie for whole brain neural activity (cFOS)
+
+<iframe src="../mesh_neurons.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+Data and classification from Diogo Matias
+
+---
+
+# Combining Makie and Interact
+
+<iframe src="../orbitdiagram.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+Video Credits: George Datseris and JuliaDynamics organization
+
+---
+
 
 # References
 
@@ -290,3 +322,5 @@ viewer = dataviewer(edit_data)
 [Interact](https://github.com/JuliaGizmos/Interact.jl)
 
 [TableWidgets](https://github.com/piever/TableWidgets.jl)
+
+[Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html)
