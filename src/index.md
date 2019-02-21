@@ -7,27 +7,27 @@ class: middle, centre
 
 Open source software development for research:
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Efficient format for tabular data
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - User-friendly tools for tabular data manipulations
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Plotting facilities for tabular data (esp. grouped data)
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Custom array type to incorporate photometry or recordings in tables
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Toolkit to build web apps following "data flow"
 
 ---
 
 # The Julia programming language
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Modern, open-source and free programming language
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Easy to use (interactive console, little "boilerplate") but good performance
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Rich type system and multiple dispatch allow for fast custom data structures
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 - Metaprogramming: Julia can modify its own code before running it
 
 ---
@@ -40,13 +40,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -56,13 +56,13 @@ fieldarrays(s) # Data is stored as columns
 
 # StructArrays: technical highlights
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 - Arbitrary column array types are supported:
     - distributed arrays for parallel computing on a cluster
     - cuda arrays to run operations on cuda kernels
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ```julia
 using CuArrays
@@ -71,10 +71,10 @@ b = CuArray(rand(Bool, 10))
 StructArray(a = a, b = b)
 ```
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 -  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ```@example
 using StructArrays, BenchmarkTools #hide
@@ -106,7 +106,7 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
@@ -168,11 +168,11 @@ In a typical dataset, recordings and behavior are mismatched:
 - Behavioral data => hundreds of rows (trials)
 - Neural data => hundreds of thousands of frames (photometry)
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ```@example 3
 using Statistics #hide
@@ -249,7 +249,7 @@ plt = Observables.@map scatter(
 )
 ```
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
 ### Layout:
 
@@ -280,13 +280,15 @@ viewer = dataviewer(edit_data)
 
 ---
 
-# Future direction: increased UI responsiveness and Interactivity
+# More interactive plotting
 
-A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) is compatible with time-varying signals: responsive interfaces where signals are shared between the plot and the UI controls.
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) provides enhanced interactivity in two ways:
+- Excellent rendering performance (interactive speed with large datasets)
+- The plot and the UI controls can share signals.
 
-fagjaebnzexhjckadwevrerewychqwinoekklqdjxchsarhazf
+hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
 
-Disclaimer: I've ported the StatsPlots package to StatsMakie but there is still some quirks to iron out before I can switch to using it exclusively.
+**Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
 ---
 
@@ -298,7 +300,7 @@ Data and classification from Diogo Matias
 
 ---
 
-# Combining Makie and Interact
+# Eye catching demos (in the wild): combining Makie and Interact
 
 <iframe src="../orbitdiagram.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 

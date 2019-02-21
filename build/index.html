@@ -181,8 +181,8 @@ s = StructArray(a = a, b = b, c = c)
 ```
 
 ```
-  3.902 ns (0 allocations: 0 bytes)
-(a = 0.8898519f0, b = false, c = 'c')
+  4.691 ns (0 allocations: 0 bytes)
+(a = 0.928239f0, b = false, c = 'c')
 ```
 
 
@@ -413,13 +413,13 @@ lead(v, 3)
 
 ```
 10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
- 0.45571341901489837
- 0.003900284651246144
- 0.17485462847279454
- 0.946964093165531
- 0.04760158864717656
- 0.06612983849530862
- 0.11799511383553463
+ 0.6988302027369977
+ 0.07746364074967116
+ 0.6832292928625796
+ 0.5113852886219703
+ 0.8417504144303645
+ 0.17369212204256024
+ 0.1462434065879734
   missing
   missing
   missing
@@ -447,10 +447,10 @@ BenchmarkTools.Trial:
   memory estimate:  32 bytes
   allocs estimate:  1
   --------------
-  minimum time:     4.508 ns (0.00% GC)
-  median time:      5.522 ns (0.00% GC)
-  mean time:        15.741 ns (56.55% GC)
-  maximum time:     6.598 μs (99.74% GC)
+  minimum time:     4.756 ns (0.00% GC)
+  median time:      5.917 ns (0.00% GC)
+  mean time:        17.912 ns (57.44% GC)
+  maximum time:     7.978 μs (99.72% GC)
   --------------
   samples:          10000
   evals/sample:     1000
@@ -477,17 +477,17 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ```
 11×4 Array{Union{Missing, Float64},2}:
- 0.601581   0.93654    0.335183  0.65376
- 0.877581   0.0183839  0.486871  0.965348
- 0.602382   0.546612   0.857314  0.858836
- 0.364303   0.830641   0.123856  0.0199961
- 0.738584   0.291869   0.579806  0.337152
- 0.426783   0.581679   0.193602  0.29576
- 0.736632   0.714582   0.686344  0.424224
- 0.451915   0.0093943  0.219424  0.803821
- 0.928053   0.446799   0.283564  0.388626
- 0.218848   0.924262   0.150655   missing
- 0.0480564  0.952613   0.375851   missing
+ 0.132831  0.437849   0.156108   0.968855
+ 0.219958  0.800328   0.688427   0.563349
+ 0.833823  0.77155    0.772595   0.213278
+ 0.488759  0.327035   0.383861   0.874348
+ 0.733337  0.639687   0.640237   0.89238
+ 0.69788   0.298829   0.55373    0.198668
+ 0.485913  0.16579    0.115313   0.200424
+ 0.130059  0.725679   0.4522     0.904303
+ 0.197168  0.69726    0.458312   0.256177
+ 0.810077  0.0100662  0.777605    missing
+ 0.378243  0.203137   0.0524773   missing
 ```
 
 
@@ -508,17 +508,17 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ```
 11-element Array{Float64,1}:
- 0.6317662487329192
- 0.5870459197597235
- 0.716286031907439
- 0.33469890097779464
- 0.4868523849899755
- 0.3744559887131784
- 0.6404453512715601
- 0.3711383676411991
- 0.5117604830854094
- 0.43125482807335863
- 0.45884013838048804
+ 0.4239107324338042
+ 0.5680156323092967
+ 0.6478115385258448
+ 0.5185005434854064
+ 0.7264100671918258
+ 0.4372766038541191
+ 0.24186027771795776
+ 0.5530601124011313
+ 0.4022290568453617
+ 0.532582687742105
+ 0.21128559644515854
 ```
 
 
@@ -609,16 +609,20 @@ viewer = dataviewer(edit_data)
 
 
 
-# Future direction: increased UI responsiveness and Interactivity
+# More interactive plotting
 
 
-A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) is compatible with time-varying signals: responsive interfaces where signals are shared between the plot and the UI controls.
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) provides enhanced interactivity in two ways:
+
+
+  * Excellent rendering performance (interactive speed with large datasets)
+  * The plot and the UI controls can share signals.
 
 
 --
 
 
-Disclaimer: I've ported the StatsPlots package to StatsMakie but there is still some quirks to iron out before I can switch to using it exclusively.
+**Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
 
 ---
@@ -640,7 +644,7 @@ Data and classification from Diogo Matias
 
 
 
-# Combining Makie and Interact
+# Eye catching demos (in the wild): combining Makie and Interact
 
 
 <iframe src="../orbitdiagram.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>

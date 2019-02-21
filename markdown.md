@@ -280,13 +280,15 @@ viewer = dataviewer(edit_data)
 
 ---
 
-# Future direction: increased UI responsiveness and Interactivity
+# More interactive plotting
 
-A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) is compatible with time-varying signals: responsive interfaces where signals are shared between the plot and the UI controls.
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) provides enhanced interactivity in two ways:
+- Excellent rendering performance (interactive speed with large datasets)
+- The plot and the UI controls can share signals.
 
 --
 
-Disclaimer: I've ported the StatsPlots package to StatsMakie but there is still some quirks to iron out before I can switch to using it exclusively.
+**Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
 ---
 
@@ -298,7 +300,7 @@ Data and classification from Diogo Matias
 
 ---
 
-# Combining Makie and Interact
+# Eye catching demos (in the wild): combining Makie and Interact
 
 <iframe src="../orbitdiagram.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
