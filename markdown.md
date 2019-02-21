@@ -14,21 +14,21 @@ Open source software development for research:
 --
 - Plotting facilities for tabular data (esp. grouped data)
 --
-- Custom array storage type to incorporate photometry or recordings in tables
+- Custom array type to incorporate photometry or recordings in tables
 --
-- Toolkit to build web apps and specialized widgets for table manipulations and data flow
+- Toolkit to build web apps following "data flow"
 
 ---
 
-# Background: the Julia programming language
+# The Julia programming language
 --
-- Modern, open-source, free programming language
+- Modern, open-source and free programming language
 --
-- Easy interactive use (REPL, little boilerplate) but good performance
+- Easy to use (interactive console, little "boilerplate") but good performance
 --
-- rich type system and multiple dispatch allow for fast custom data structures
+- Rich type system and multiple dispatch allow for fast custom data structures
 --
-- metaprogramming: Julia can modify its own code before running it, which allows intuitive interfaces
+- Metaprogramming: Julia can modify its own code before running it
 
 ---
 
@@ -54,6 +54,35 @@ fieldarrays(s) # Data is stored as columns
 
 ---
 
+# StructArrays: technical highlights
+
+--
+
+- Arbitrary column array types are supported:
+    - distributed arrays for parallel computing on a cluster
+    - cuda arrays to run operations on cuda kernels
+
+```julia
+using CuArrays
+a = CuArray(rand(Float32, 10))
+b = CuArray(rand(Bool, 10))
+StructArray(a = a, b = b)
+```
+
+--
+-  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+
+```@example
+using StructArrays, BenchmarkTools #hide
+a = rand(Float32, 26)
+b = rand(Bool, 26)
+c = 'a':'z'
+s = StructArray(a = a, b = b, c = c)
+@btime $s[3]
+```
+
+---
+
 # Working with tabular data
 
 ```@example 2
@@ -63,7 +92,7 @@ iris = loadtable("/home/pietro/Data/examples/iris.csv")
 ```
 
 
---- 
+---
 
 # Working with columns
 
@@ -141,7 +170,7 @@ The package ShiftedArrays addresses this issue by creating a custom array type w
 
 ```@example 3
 using Statistics #hide
-using ShiftedArrays 
+using ShiftedArrays
 v = rand(10)
 lead(v, 3)
 ```
@@ -155,7 +184,7 @@ The underlying data is shared, so creating a `ShiftedArray` is very cheap:
 ```@example 3
 using BenchmarkTools # hide
 v = rand(1_000_000)
-@benchmark lead(v, 100)
+@benchmark lead($v, 100)
 ```
 
 ---
@@ -240,6 +269,6 @@ t = map(loadtable, filename)
 filtered_data = selectors(t)
 edited_data = data_editor(filtered_data)
 
-spreadsheet = 
+spreadsheet =
 viewer = dataviewer(edit_data)
 ```

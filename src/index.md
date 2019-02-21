@@ -7,28 +7,28 @@ class: middle, centre
 
 Open source software development for research:
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 - Efficient format for tabular data
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 - User-friendly tools for tabular data manipulations
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 - Plotting facilities for tabular data (esp. grouped data)
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
-- Custom array storage type to incorporate photometry or recordings in tables
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
-- Toolkit to build web apps and specialized widgets for table manipulations and data flow
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+- Custom array type to incorporate photometry or recordings in tables
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+- Toolkit to build web apps following "data flow"
 
 ---
 
-# Background: the Julia programming language
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
-- Modern, open-source, free programming language
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
-- Easy interactive use (REPL, little boilerplate) but good performance
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
-- rich type system and multiple dispatch allow for fast custom data structures
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
-- metaprogramming: Julia can modify its own code before running it, which allows intuitive interfaces
+# The Julia programming language
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+- Modern, open-source and free programming language
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+- Easy to use (interactive console, little "boilerplate") but good performance
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+- Rich type system and multiple dispatch allow for fast custom data structures
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+- Metaprogramming: Julia can modify its own code before running it
 
 ---
 
@@ -40,16 +40,45 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
+```
+
+---
+
+# StructArrays: technical highlights
+
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+
+- Arbitrary column array types are supported:
+    - distributed arrays for parallel computing on a cluster
+    - cuda arrays to run operations on cuda kernels
+
+```julia
+using CuArrays
+a = CuArray(rand(Float32, 10))
+b = CuArray(rand(Bool, 10))
+StructArray(a = a, b = b)
+```
+
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
+-  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+
+```@example
+using StructArrays, BenchmarkTools #hide
+a = rand(Float32, 26)
+b = rand(Bool, 26)
+c = 'a':'z'
+s = StructArray(a = a, b = b, c = c)
+@btime $s[3]
 ```
 
 ---
@@ -63,7 +92,7 @@ iris = loadtable("/home/pietro/Data/examples/iris.csv")
 ```
 
 
---- 
+---
 
 # Working with columns
 
@@ -73,7 +102,7 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
@@ -133,15 +162,15 @@ end
 
 While working with tables is obviously useful for behavioral data, it is less clear how neural data fits into the picture.
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 
 ```@example 3
 using Statistics #hide
-using ShiftedArrays 
+using ShiftedArrays
 v = rand(10)
 lead(v, 3)
 ```
@@ -155,7 +184,7 @@ The underlying data is shared, so creating a `ShiftedArray` is very cheap:
 ```@example 3
 using BenchmarkTools # hide
 v = rand(1_000_000)
-@benchmark lead(v, 100)
+@benchmark lead($v, 100)
 ```
 
 ---
@@ -214,7 +243,7 @@ plt = Observables.@map scatter(
 )
 ```
 
-hvsrbnhblecxxjrmpvvzdujvtlplglacmvstnplkepextxvscx
+dsbktsrjbjtbgwdshyysxbuujasbnmxipiuwbcpvgdocuskjcr
 
 
 ### Layout:
@@ -240,6 +269,6 @@ t = map(loadtable, filename)
 filtered_data = selectors(t)
 edited_data = data_editor(filtered_data)
 
-spreadsheet = 
+spreadsheet =
 viewer = dataviewer(edit_data)
 ```

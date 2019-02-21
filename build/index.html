@@ -48,13 +48,13 @@ Open source software development for research:
 --
 
 
-  * Custom array storage type to incorporate photometry or recordings in tables
+  * Custom array type to incorporate photometry or recordings in tables
 
 
 --
 
 
-  * Toolkit to build web apps and specialized widgets for table manipulations and data flow
+  * Toolkit to build web apps following "data flow"
 
 
 ---
@@ -62,31 +62,31 @@ Open source software development for research:
 
 
 
-# Background: the Julia programming language
+# The Julia programming language
 
 
 --
 
 
-  * Modern, open-source, free programming language
+  * Modern, open-source and free programming language
 
 
 --
 
 
-  * Easy interactive use (REPL, little boilerplate) but good performance
+  * Easy to use (interactive console, little "boilerplate") but good performance
 
 
 --
 
 
-  * rich type system and multiple dispatch allow for fast custom data structures
+  * Rich type system and multiple dispatch allow for fast custom data structures
 
 
 --
 
 
-  * metaprogramming: Julia can modify its own code before running it, which allows intuitive interfaces
+  * Metaprogramming: Julia can modify its own code before running it
 
 
 ---
@@ -132,6 +132,51 @@ fieldarrays(s) # Data is stored as columns
 
 ```
 (a = 1:3, b = ["x", "y", "z"])
+```
+
+
+---
+
+
+
+
+# StructArrays: technical highlights
+
+
+--
+
+
+  * Arbitrary column array types are supported:
+
+      * distributed arrays for parallel computing on a cluster
+      * cuda arrays to run operations on cuda kernels
+
+
+```julia
+using CuArrays
+a = CuArray(rand(Float32, 10))
+b = CuArray(rand(Bool, 10))
+StructArray(a = a, b = b)
+```
+
+
+--
+
+
+  * for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+
+
+```julia
+a = rand(Float32, 26)
+b = rand(Bool, 26)
+c = 'a':'z'
+s = StructArray(a = a, b = b, c = c)
+@btime $s[3]
+```
+
+```
+  3.734 ns (0 allocations: 0 bytes)
+(a = 0.72558033f0, b = true, c = 'c')
 ```
 
 
@@ -358,13 +403,13 @@ lead(v, 3)
 
 ```
 10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
- 0.22518187652823007
- 0.9092427813895254
- 0.5512987444077333
- 0.595083226433448
- 0.2604609461785239
- 0.7873312495345461
- 0.9316859835467748
+ 0.2192562054341165
+ 0.12786060779784258
+ 0.08936799204076218
+ 0.20149970174344278
+ 0.6746525262518119
+ 0.2743560413811996
+ 0.014033075998910238
   missing
   missing
   missing
@@ -384,7 +429,7 @@ The underlying data is shared, so creating a `ShiftedArray` is very cheap:
 
 ```julia
 v = rand(1_000_000)
-@benchmark lead(v, 100)
+@benchmark lead($v, 100)
 ```
 
 ```
@@ -392,13 +437,13 @@ BenchmarkTools.Trial:
   memory estimate:  32 bytes
   allocs estimate:  1
   --------------
-  minimum time:     21.626 ns (0.00% GC)
-  median time:      22.489 ns (0.00% GC)
-  mean time:        32.650 ns (27.47% GC)
-  maximum time:     7.103 μs (99.53% GC)
+  minimum time:     4.482 ns (0.00% GC)
+  median time:      5.409 ns (0.00% GC)
+  mean time:        11.836 ns (49.61% GC)
+  maximum time:     4.522 μs (99.57% GC)
   --------------
   samples:          10000
-  evals/sample:     997
+  evals/sample:     1000
 ```
 
 
@@ -422,17 +467,17 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ```
 11×4 Array{Union{Missing, Float64},2}:
- 0.283091  0.836055  0.0558817  0.557939
- 0.187606  0.125187  0.746841   0.823962
- 0.801678  0.865446  0.861868   0.780686
- 0.658411  0.277351  0.978255   0.75405
- 0.375842  0.799062  0.755641   0.794717
- 0.313779  0.537609  0.788427   0.237188
- 0.488124  0.909658  0.804261   0.36637
- 0.614467  0.806124  0.753484   0.159586
- 0.254945  0.680912  0.163256   0.436483
- 0.384522  0.355689  0.655722    missing
- 0.917321  0.277513  0.759482    missing
+ 0.365921  0.96983   0.714416  0.695626
+ 0.445109  0.444828  0.619937  0.651432
+ 0.82103   0.272889  0.868283  0.0879501
+ 0.388221  0.912627  0.995729  0.598401
+ 0.179518  0.24924   0.848138  0.0836703
+ 0.958698  0.585779  0.510247  0.652523
+ 0.990335  0.02755   0.727946  0.738592
+ 0.914725  0.819189  0.499416  0.418584
+ 0.980513  0.507723  0.684031  0.157712
+ 0.523193  0.220871  0.382333   missing
+ 0.942826  0.625055  0.881678   missing
 ```
 
 
@@ -453,17 +498,17 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ```
 11-element Array{Float64,1}:
- 0.43324173266979504
- 0.47089909386224305
- 0.827419346942323
- 0.667016802248358
- 0.6813156303955057
- 0.46925075415119677
- 0.642103460985919
- 0.5834150354145662
- 0.3838991375725161
- 0.465311170054503
- 0.6514386161468383
+ 0.6864484659492531
+ 0.5403263515656116
+ 0.5125380765547428
+ 0.7237446070161724
+ 0.3401414771311221
+ 0.6768117531708986
+ 0.6211056824550788
+ 0.6629785143925802
+ 0.5824946256229557
+ 0.37546573682651546
+ 0.8165195298276613
 ```
 
 
@@ -544,7 +589,7 @@ t = map(loadtable, filename)
 filtered_data = selectors(t)
 edited_data = data_editor(filtered_data)
 
-spreadsheet = 
+spreadsheet =
 viewer = dataviewer(edit_data)
 ```
 
