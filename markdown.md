@@ -234,14 +234,25 @@ end
 
 ---
 
-### UI logic
+# Easy web based interfaces: Interact
+
+- Create web-based interactive interfaces with little code
+- Works (in theory) locally with electron, from a server, on the jupyter notebook and in atom
+
+<iframe src="../interact.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+---
+
+### Widgets and logic:
 
 ```julia
+using StatsPlots, Interact
 color = colorpicker()
 npoints = slider(10:100, label = "npoints")
 markersize = slider(3:10, label = "markersize")
 label = textbox("insert legend entry")
-plt = Observables.@map scatter(
+
+plt = Interact.@map scatter(
     rand(&npoints), rand(&npoints),
     color = &color,
     markersize = &markersize,
@@ -266,23 +277,37 @@ ui = vbox(
 
 ---
 
-# Interactive data pipeline
+### Widgets and logic:
 
 ```julia
+using JuliaDBMeta, TableWidgets
 filename = filepicker()
-t = map(loadtable, filename)
-filtered_data = selectors(t)
-edited_data = data_editor(filtered_data)
+placeholder = table((a = ["Load a real table"],))
+input_data = Interact.@map isempty(&fn) ? placeholder : loadtable(&fn)
+filtered_data = selectors(input_data)
+edited_data = dataeditor(filtered_data)
+viewer = dataviewer(edited_data)
+```
 
-spreadsheet =
-viewer = dataviewer(edit_data)
+--
+
+### Layout:
+
+```julia
+tabs = OrderedDict(
+    :filename => filename,
+    :filtered_data => filtered_data,
+    :edited_data => edited_data,
+    :viewer => viewer
+)
+ui = tabulator(tabs)
 ```
 
 ---
 
 # More interactive plotting
 
-A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) provides enhanced interactivity in two ways:
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by Simon Danisch: Julia + OpenGL) provides enhanced interactivity in two ways:
 - Excellent rendering performance (interactive speed with large datasets)
 - The plot and the UI controls can share signals.
 

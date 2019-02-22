@@ -181,8 +181,8 @@ s = StructArray(a = a, b = b, c = c)
 ```
 
 ```
-  4.691 ns (0 allocations: 0 bytes)
-(a = 0.928239f0, b = false, c = 'c')
+  4.648 ns (0 allocations: 0 bytes)
+(a = 0.27527845f0, b = false, c = 'c')
 ```
 
 
@@ -413,13 +413,13 @@ lead(v, 3)
 
 ```
 10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
- 0.6988302027369977
- 0.07746364074967116
- 0.6832292928625796
- 0.5113852886219703
- 0.8417504144303645
- 0.17369212204256024
- 0.1462434065879734
+ 0.16750688489640853
+ 0.29228608674350776
+ 0.2175708603573301
+ 0.7357109012417673
+ 0.32080179708824375
+ 0.9363452845158995
+ 0.10296527238633058
   missing
   missing
   missing
@@ -447,10 +447,10 @@ BenchmarkTools.Trial:
   memory estimate:  32 bytes
   allocs estimate:  1
   --------------
-  minimum time:     4.756 ns (0.00% GC)
-  median time:      5.917 ns (0.00% GC)
-  mean time:        17.912 ns (57.44% GC)
-  maximum time:     7.978 μs (99.72% GC)
+  minimum time:     4.528 ns (0.00% GC)
+  median time:      5.662 ns (0.00% GC)
+  mean time:        13.666 ns (49.69% GC)
+  maximum time:     5.122 μs (99.60% GC)
   --------------
   samples:          10000
   evals/sample:     1000
@@ -477,17 +477,17 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ```
 11×4 Array{Union{Missing, Float64},2}:
- 0.132831  0.437849   0.156108   0.968855
- 0.219958  0.800328   0.688427   0.563349
- 0.833823  0.77155    0.772595   0.213278
- 0.488759  0.327035   0.383861   0.874348
- 0.733337  0.639687   0.640237   0.89238
- 0.69788   0.298829   0.55373    0.198668
- 0.485913  0.16579    0.115313   0.200424
- 0.130059  0.725679   0.4522     0.904303
- 0.197168  0.69726    0.458312   0.256177
- 0.810077  0.0100662  0.777605    missing
- 0.378243  0.203137   0.0524773   missing
+ 0.195456   0.934862   0.801193  0.882723
+ 0.93629    0.164262   0.801198  0.167564
+ 0.295295   0.262034   0.508198  0.177382
+ 0.108135   0.243629   0.591848  0.907741
+ 0.281243   0.659317   0.150119  0.940993
+ 0.0670622  0.821121   0.59186   0.966526
+ 0.433756   0.348947   0.114874  0.0520083
+ 0.236462   0.485311   0.830041  0.29969
+ 0.162451   0.779518   0.77938   0.824402
+ 0.688717   0.0708343  0.458879   missing
+ 0.632203   0.764956   0.944041   missing
 ```
 
 
@@ -508,17 +508,17 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ```
 11-element Array{Float64,1}:
- 0.4239107324338042
- 0.5680156323092967
- 0.6478115385258448
- 0.5185005434854064
- 0.7264100671918258
- 0.4372766038541191
- 0.24186027771795776
- 0.5530601124011313
- 0.4022290568453617
- 0.532582687742105
- 0.21128559644515854
+ 0.7035586746779199
+ 0.5173286061159157
+ 0.3107272039247648
+ 0.46283831360661054
+ 0.5079180570950905
+ 0.611642373914943
+ 0.23739616382515
+ 0.4628762632160155
+ 0.6364377532929647
+ 0.40614337572924125
+ 0.7804003923336995
 ```
 
 
@@ -549,15 +549,32 @@ end
 
 
 
-### UI logic
+# Easy web based interfaces: Interact
+
+
+  * Create web-based interactive interfaces with little code
+  * Works (in theory) locally with electron, from a server, on the jupyter notebook and in atom
+
+
+<iframe src="../interact.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+
+---
+
+
+
+
+### Widgets and logic:
 
 
 ```julia
+using StatsPlots, Interact
 color = colorpicker()
 npoints = slider(10:100, label = "npoints")
 markersize = slider(3:10, label = "markersize")
 label = textbox("insert legend entry")
-plt = Observables.@map scatter(
+
+plt = Interact.@map scatter(
     rand(&npoints), rand(&npoints),
     color = &color,
     markersize = &markersize,
@@ -590,17 +607,36 @@ ui = vbox(
 
 
 
-# Interactive data pipeline
+### Widgets and logic:
 
 
 ```julia
+using JuliaDBMeta, TableWidgets
 filename = filepicker()
-t = map(loadtable, filename)
-filtered_data = selectors(t)
-edited_data = data_editor(filtered_data)
+placeholder = table((a = ["Load a real table"],))
+input_data = Interact.@map isempty(&fn) ? placeholder : loadtable(&fn)
+filtered_data = selectors(input_data)
+edited_data = dataeditor(filtered_data)
+viewer = dataviewer(edited_data)
+```
 
-spreadsheet =
-viewer = dataviewer(edit_data)
+
+--
+
+
+
+
+### Layout:
+
+
+```julia
+tabs = OrderedDict(
+    :filename => filename,
+    :filtered_data => filtered_data,
+    :edited_data => edited_data,
+    :viewer => viewer
+)
+ui = tabulator(tabs)
 ```
 
 
@@ -612,7 +648,7 @@ viewer = dataviewer(edit_data)
 # More interactive plotting
 
 
-A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) provides enhanced interactivity in two ways:
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by Simon Danisch: Julia + OpenGL) provides enhanced interactivity in two ways:
 
 
   * Excellent rendering performance (interactive speed with large datasets)

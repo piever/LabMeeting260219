@@ -7,27 +7,27 @@ class: middle, centre
 
 Open source software development for research:
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Efficient format for tabular data
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - User-friendly tools for tabular data manipulations
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Plotting facilities for tabular data (esp. grouped data)
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Custom array type to incorporate photometry or recordings in tables
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Toolkit to build web apps following "data flow"
 
 ---
 
 # The Julia programming language
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Modern, open-source and free programming language
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Easy to use (interactive console, little "boilerplate") but good performance
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Rich type system and multiple dispatch allow for fast custom data structures
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 - Metaprogramming: Julia can modify its own code before running it
 
 ---
@@ -40,13 +40,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -56,13 +56,13 @@ fieldarrays(s) # Data is stored as columns
 
 # StructArrays: technical highlights
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 - Arbitrary column array types are supported:
     - distributed arrays for parallel computing on a cluster
     - cuda arrays to run operations on cuda kernels
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ```julia
 using CuArrays
@@ -71,10 +71,10 @@ b = CuArray(rand(Bool, 10))
 StructArray(a = a, b = b)
 ```
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 -  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ```@example
 using StructArrays, BenchmarkTools #hide
@@ -106,7 +106,7 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
@@ -168,11 +168,11 @@ In a typical dataset, recordings and behavior are mismatched:
 - Behavioral data => hundreds of rows (trials)
 - Neural data => hundreds of thousands of frames (photometry)
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ```@example 3
 using Statistics #hide
@@ -234,14 +234,25 @@ end
 
 ---
 
-### UI logic
+# Easy web based interfaces: Interact
+
+- Create web-based interactive interfaces with little code
+- Works (in theory) locally with electron, from a server, on the jupyter notebook and in atom
+
+<iframe src="../interact.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+---
+
+### Widgets and logic:
 
 ```julia
+using StatsPlots, Interact
 color = colorpicker()
 npoints = slider(10:100, label = "npoints")
 markersize = slider(3:10, label = "markersize")
 label = textbox("insert legend entry")
-plt = Observables.@map scatter(
+
+plt = Interact.@map scatter(
     rand(&npoints), rand(&npoints),
     color = &color,
     markersize = &markersize,
@@ -249,7 +260,7 @@ plt = Observables.@map scatter(
 )
 ```
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 ### Layout:
 
@@ -266,27 +277,41 @@ ui = vbox(
 
 ---
 
-# Interactive data pipeline
+### Widgets and logic:
 
 ```julia
+using JuliaDBMeta, TableWidgets
 filename = filepicker()
-t = map(loadtable, filename)
-filtered_data = selectors(t)
-edited_data = data_editor(filtered_data)
+placeholder = table((a = ["Load a real table"],))
+input_data = Interact.@map isempty(&fn) ? placeholder : loadtable(&fn)
+filtered_data = selectors(input_data)
+edited_data = dataeditor(filtered_data)
+viewer = dataviewer(edited_data)
+```
 
-spreadsheet =
-viewer = dataviewer(edit_data)
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+
+### Layout:
+
+```julia
+tabs = OrderedDict(
+    :filename => filename,
+    :filtered_data => filtered_data,
+    :edited_data => edited_data,
+    :viewer => viewer
+)
+ui = tabulator(tabs)
 ```
 
 ---
 
 # More interactive plotting
 
-A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by `@SimonDanisch`: Julia + OpenGL) provides enhanced interactivity in two ways:
+A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html) by Simon Danisch: Julia + OpenGL) provides enhanced interactivity in two ways:
 - Excellent rendering performance (interactive speed with large datasets)
 - The plot and the UI controls can share signals.
 
-hvhsnmzqpoeyudrbgkekhwxmadwjmgoqjjwbnjoqndxhtjlqjd
+mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
 
 **Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
