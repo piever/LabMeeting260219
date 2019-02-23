@@ -21,6 +21,38 @@ class: middle, centre
 
 
 
+# What data?
+
+
+The focus will be on tabular data: a set of named columns where each column has a consistent type (string, integer, boolean, date, floating point, complex number, custom type).
+
+
+In this format, a row correspond to an observation and the various columns are observed quantities.
+
+
+--
+
+
+  * Widely used format in data science languages R and Python (data.frame, data.table, pandas).
+
+
+--
+
+
+  * Input format of choice for many analysis packages (e.g. generalized linear model toolkits).
+
+
+--
+
+
+  * Preferred (only?) supported data format in online databases such as SQL.
+
+
+---
+
+
+
+
 # Introduction
 
 
@@ -54,7 +86,30 @@ Open source software development for research:
 --
 
 
-  * Toolkit to build web apps following "data flow"
+  * Toolkit to build web apps (either locally or on a server) following "data flow"
+
+
+---
+
+
+
+
+# Will it work on my data?
+
+
+Even though in the presentation I will mainly use publicly available example datasets, this toolkit has been used in the lab for:
+
+
+  * freely-moving and head-fixed rodent behavior
+
+      * bulk imaging
+      * electro-physiology
+  * human behavior
+
+      * questionnaire data
+
+
+  * fly behavior
 
 
 ---
@@ -146,6 +201,29 @@ fieldarrays(s) # Data is stored as columns
 --
 
 
+  * For immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+
+
+--
+
+
+```julia
+a = rand(Float32, 26)
+b = rand(Bool, 26)
+c = 'a':'z'
+s = StructArray(a = a, b = b, c = c)
+@btime $s[3]
+```
+
+```
+  3.732 ns (0 allocations: 0 bytes)
+(a = 0.84941494f0, b = false, c = 'c')
+```
+
+
+--
+
+
   * Arbitrary column array types are supported:
 
       * distributed arrays for parallel computing on a cluster
@@ -163,27 +241,21 @@ StructArray(a = a, b = b)
 ```
 
 
---
+---
 
 
-  * for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
 
---
+# Technical highlights: why does it matter?
 
 
-```julia
-a = rand(Float32, 26)
-b = rand(Bool, 26)
-c = 'a':'z'
-s = StructArray(a = a, b = b, c = c)
-@btime $s[3]
-```
+  * When the data is too big, in memory array types will no longer work.
 
-```
-  4.648 ns (0 allocations: 0 bytes)
-(a = 0.27527845f0, b = false, c = 'c')
-```
+
+  * Some operations on data are "embarrassingly parallel": for example applying a function to each row in the table. Important to be able to compute in parallel (GPU or cluster).
+
+
+Julia allows to pass from single threaded computing on a single core to parallel computing on a cluster (like Pandas plus Dask) or on the GPU (exciting new direction, not fully worked out for tabular datasets).
 
 
 ---
@@ -259,6 +331,12 @@ Species       Mean   STD
 "versicolor"  5.936  0.313798
 "virginica"   6.588  0.322497
 ```
+
+
+--
+
+
+Pop quiz: this simple operation is very common with our data, how many lines of code would it take in the format you are using? What if you were grouping by more than one column?
 
 
 ---
@@ -413,13 +491,13 @@ lead(v, 3)
 
 ```
 10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
- 0.16750688489640853
- 0.29228608674350776
- 0.2175708603573301
- 0.7357109012417673
- 0.32080179708824375
- 0.9363452845158995
- 0.10296527238633058
+ 0.828230072808519
+ 0.34232248507752217
+ 0.03327183572861747
+ 0.12433014805260334
+ 0.4501401886305125
+ 0.44356386536515235
+ 0.4162356632445783
   missing
   missing
   missing
@@ -447,10 +525,10 @@ BenchmarkTools.Trial:
   memory estimate:  32 bytes
   allocs estimate:  1
   --------------
-  minimum time:     4.528 ns (0.00% GC)
-  median time:      5.662 ns (0.00% GC)
-  mean time:        13.666 ns (49.69% GC)
-  maximum time:     5.122 μs (99.60% GC)
+  minimum time:     4.447 ns (0.00% GC)
+  median time:      5.424 ns (0.00% GC)
+  mean time:        12.100 ns (51.18% GC)
+  maximum time:     4.928 μs (99.59% GC)
   --------------
   samples:          10000
   evals/sample:     1000
@@ -477,17 +555,17 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ```
 11×4 Array{Union{Missing, Float64},2}:
- 0.195456   0.934862   0.801193  0.882723
- 0.93629    0.164262   0.801198  0.167564
- 0.295295   0.262034   0.508198  0.177382
- 0.108135   0.243629   0.591848  0.907741
- 0.281243   0.659317   0.150119  0.940993
- 0.0670622  0.821121   0.59186   0.966526
- 0.433756   0.348947   0.114874  0.0520083
- 0.236462   0.485311   0.830041  0.29969
- 0.162451   0.779518   0.77938   0.824402
- 0.688717   0.0708343  0.458879   missing
- 0.632203   0.764956   0.944041   missing
+ 0.0529484  0.347656   0.432237  0.48407
+ 0.471569   0.230826   0.594285  0.210401
+ 0.508001   0.0622939  0.951043  0.880317
+ 0.238002   0.0142867  0.785623  0.693556
+ 0.0325122  0.815732   0.648722  0.916453
+ 0.718727   0.433204   0.84345   0.230594
+ 0.335605   0.0831777  0.461884  0.840995
+ 0.658195   0.749976   0.982013  0.125796
+ 0.878772   0.879989   0.20315   0.555088
+ 0.31102    0.234569   0.602572   missing
+ 0.242324   0.932764   0.14705    missing
 ```
 
 
@@ -508,17 +586,17 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ```
 11-element Array{Float64,1}:
- 0.7035586746779199
- 0.5173286061159157
- 0.3107272039247648
- 0.46283831360661054
- 0.5079180570950905
- 0.611642373914943
- 0.23739616382515
- 0.4628762632160155
- 0.6364377532929647
- 0.40614337572924125
- 0.7804003923336995
+ 0.3292279584427404
+ 0.3767701982683885
+ 0.600413847794448
+ 0.43286691592005844
+ 0.6033546128564289
+ 0.556493880863539
+ 0.43041551283662166
+ 0.6289949179683707
+ 0.6292495507743632
+ 0.3827202815663784
+ 0.4407129525815834
 ```
 
 
@@ -600,6 +678,59 @@ ui = vbox(
     plt
 )
 ```
+
+
+---
+
+
+
+
+# Deployment
+
+
+Locally:
+
+
+```julia
+using Blink
+w = Window()
+body!(w, ui)
+```
+
+
+--
+
+
+In the browser (for data sharing / interactive presentations either in the lab or in big projects like IBL):
+
+
+```julia
+using Mux
+WebIO.webio_serve(page("/", req -> ui))
+```
+
+
+Caveat: better to put code in a function to serve independent widgets to different users connecting to the same site.
+
+
+---
+
+
+
+
+# Simple app for data analysis
+
+
+The same logic can be applied to create an app to do basic analysis on a table. In a few lines of code create:
+
+
+  * a filepicker to select data
+  * a set of filters to subselect (it adjusts automatically to the table provided)
+  * an editor for custom data operations
+  * a visual way to select what plot to do
+
+
+All organized in separate tabs.
 
 
 ---

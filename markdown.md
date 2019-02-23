@@ -3,6 +3,21 @@ class: middle, centre
 
 ---
 
+# What data?
+
+The focus will be on tabular data: a set of named columns where each column has a consistent type (string, integer, boolean, date, floating point, complex number, custom type).
+
+In this format, a row correspond to an observation and the various columns are observed quantities.
+
+--
+- Widely used format in data science languages R and Python (data.frame, data.table, pandas).
+--
+- Input format of choice for many analysis packages (e.g. generalized linear model toolkits).
+--
+- Preferred (only?) supported data format in online databases such as SQL.
+
+---
+
 # Introduction
 
 Open source software development for research:
@@ -16,7 +31,23 @@ Open source software development for research:
 --
 - Custom array type to incorporate photometry or recordings in tables
 --
-- Toolkit to build web apps following "data flow"
+- Toolkit to build web apps (either locally or on a server) following "data flow"
+
+---
+
+# Will it work on my data?
+
+Even though in the presentation I will mainly use publicly available example datasets, this toolkit has been used in the lab for:
+
+- freely-moving and head-fixed rodent behavior
+    - bulk imaging
+    - electro-physiology
+
+- human behavior
+    - questionnaire data
+
+
+- fly behavior
 
 ---
 
@@ -58,6 +89,21 @@ fieldarrays(s) # Data is stored as columns
 
 --
 
+-  For immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+
+--
+
+```@example
+using StructArrays, BenchmarkTools #hide
+a = rand(Float32, 26)
+b = rand(Bool, 26)
+c = 'a':'z'
+s = StructArray(a = a, b = b, c = c)
+@btime $s[3]
+```
+
+--
+
 - Arbitrary column array types are supported:
     - distributed arrays for parallel computing on a cluster
     - cuda arrays to run operations on cuda kernels
@@ -71,19 +117,16 @@ b = CuArray(rand(Bool, 10))
 StructArray(a = a, b = b)
 ```
 
---
--  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
+---
 
---
+# Technical highlights: why does it matter?
 
-```@example
-using StructArrays, BenchmarkTools #hide
-a = rand(Float32, 26)
-b = rand(Bool, 26)
-c = 'a':'z'
-s = StructArray(a = a, b = b, c = c)
-@btime $s[3]
-```
+- When the data is too big, in memory array types will no longer work.
+
+
+- Some operations on data are "embarrassingly parallel": for example applying a function to each row in the table. Important to be able to compute in parallel (GPU or cluster).
+
+Julia allows to pass from single threaded computing on a single core to parallel computing on a cluster (like Pandas plus Dask) or on the GPU (exciting new direction, not fully worked out for tabular datasets).
 
 ---
 
@@ -111,6 +154,10 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
 ```
+
+--
+
+Pop quiz: this simple operation is very common with our data, how many lines of code would it take in the format you are using? What if you were grouping by more than one column?
 
 ---
 
@@ -274,6 +321,42 @@ ui = vbox(
     plt
 )
 ```
+
+---
+
+# Deployment
+
+Locally:
+
+```julia
+using Blink
+w = Window()
+body!(w, ui)
+```
+
+--
+
+In the browser (for data sharing / interactive presentations either in the lab or in big projects like IBL):
+
+```julia
+using Mux
+WebIO.webio_serve(page("/", req -> ui))
+```
+
+Caveat: better to put code in a function to serve independent widgets to different users connecting to the same site.
+
+---
+
+# Simple app for data analysis
+
+The same logic can be applied to create an app to do basic analysis on a table. In a few lines of code create:
+
+- a filepicker to select data
+- a set of filters to subselect (it adjusts automatically to the table provided)
+- an editor for custom data operations
+- a visual way to select what plot to do
+
+All organized in separate tabs.
 
 ---
 

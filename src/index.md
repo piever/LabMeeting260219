@@ -3,31 +3,62 @@ class: middle, centre
 
 ---
 
+# What data?
+
+The focus will be on tabular data: a set of named columns where each column has a consistent type (string, integer, boolean, date, floating point, complex number, custom type).
+
+In this format, a row correspond to an observation and the various columns are observed quantities.
+
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+- Widely used format in data science languages R and Python (data.frame, data.table, pandas).
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+- Input format of choice for many analysis packages (e.g. generalized linear model toolkits).
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+- Preferred (only?) supported data format in online databases such as SQL.
+
+---
+
 # Introduction
 
 Open source software development for research:
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Efficient format for tabular data
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - User-friendly tools for tabular data manipulations
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Plotting facilities for tabular data (esp. grouped data)
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Custom array type to incorporate photometry or recordings in tables
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
-- Toolkit to build web apps following "data flow"
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+- Toolkit to build web apps (either locally or on a server) following "data flow"
+
+---
+
+# Will it work on my data?
+
+Even though in the presentation I will mainly use publicly available example datasets, this toolkit has been used in the lab for:
+
+- freely-moving and head-fixed rodent behavior
+    - bulk imaging
+    - electro-physiology
+
+- human behavior
+    - questionnaire data
+
+
+- fly behavior
 
 ---
 
 # The Julia programming language
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Modern, open-source and free programming language
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Easy to use (interactive console, little "boilerplate") but good performance
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Rich type system and multiple dispatch allow for fast custom data structures
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 - Metaprogramming: Julia can modify its own code before running it
 
 ---
@@ -40,13 +71,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -56,25 +87,11 @@ fieldarrays(s) # Data is stored as columns
 
 # StructArrays: technical highlights
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
-- Arbitrary column array types are supported:
-    - distributed arrays for parallel computing on a cluster
-    - cuda arrays to run operations on cuda kernels
+-  For immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
-
-```julia
-using CuArrays
-a = CuArray(rand(Float32, 10))
-b = CuArray(rand(Bool, 10))
-StructArray(a = a, b = b)
-```
-
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
--  for immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
-
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ```@example
 using StructArrays, BenchmarkTools #hide
@@ -84,6 +101,32 @@ c = 'a':'z'
 s = StructArray(a = a, b = b, c = c)
 @btime $s[3]
 ```
+
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+
+- Arbitrary column array types are supported:
+    - distributed arrays for parallel computing on a cluster
+    - cuda arrays to run operations on cuda kernels
+
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+
+```julia
+using CuArrays
+a = CuArray(rand(Float32, 10))
+b = CuArray(rand(Bool, 10))
+StructArray(a = a, b = b)
+```
+
+---
+
+# Technical highlights: why does it matter?
+
+- When the data is too big, in memory array types will no longer work.
+
+
+- Some operations on data are "embarrassingly parallel": for example applying a function to each row in the table. Important to be able to compute in parallel (GPU or cluster).
+
+Julia allows to pass from single threaded computing on a single core to parallel computing on a cluster (like Pandas plus Dask) or on the GPU (exciting new direction, not fully worked out for tabular datasets).
 
 ---
 
@@ -106,11 +149,15 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
 ```
+
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+
+Pop quiz: this simple operation is very common with our data, how many lines of code would it take in the format you are using? What if you were grouping by more than one column?
 
 ---
 
@@ -168,11 +215,11 @@ In a typical dataset, recordings and behavior are mismatched:
 - Behavioral data => hundreds of rows (trials)
 - Neural data => hundreds of thousands of frames (photometry)
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ```@example 3
 using Statistics #hide
@@ -260,7 +307,7 @@ plt = Interact.@map scatter(
 )
 ```
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ### Layout:
 
@@ -277,6 +324,42 @@ ui = vbox(
 
 ---
 
+# Deployment
+
+Locally:
+
+```julia
+using Blink
+w = Window()
+body!(w, ui)
+```
+
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+
+In the browser (for data sharing / interactive presentations either in the lab or in big projects like IBL):
+
+```julia
+using Mux
+WebIO.webio_serve(page("/", req -> ui))
+```
+
+Caveat: better to put code in a function to serve independent widgets to different users connecting to the same site.
+
+---
+
+# Simple app for data analysis
+
+The same logic can be applied to create an app to do basic analysis on a table. In a few lines of code create:
+
+- a filepicker to select data
+- a set of filters to subselect (it adjusts automatically to the table provided)
+- an editor for custom data operations
+- a visual way to select what plot to do
+
+All organized in separate tabs.
+
+---
+
 ### Widgets and logic:
 
 ```julia
@@ -289,7 +372,7 @@ edited_data = dataeditor(filtered_data)
 viewer = dataviewer(edited_data)
 ```
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 ### Layout:
 
@@ -311,7 +394,7 @@ A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable
 - Excellent rendering performance (interactive speed with large datasets)
 - The plot and the UI controls can share signals.
 
-mtmbplxppcxdivelwxrmnbwporxboafacdllggizqdyzaufzrv
+csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 **Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
