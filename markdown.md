@@ -3,7 +3,7 @@ class: middle, centre
 
 ---
 
-# What data?
+# What kind of data?
 
 The focus will be on tabular data: a set of named columns where each column has a consistent type (string, integer, boolean, date, floating point, complex number, custom type).
 
@@ -255,7 +255,7 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ---
 
-# Adding neural data to a table: ShiftedArrays
+# Computing aligned summary statistics
 
 ShiftedArrays also provides utility function to reduce the data:
 
@@ -264,6 +264,25 @@ reduce_vec(mean, shiftedvecs, -5:5)
 ```
 
 ---
+
+# Computing aligned summary statistics
+
+```julia
+reduce_vec(mean, shiftedvecs, -5:5)
+```
+
+![](../figures/vectors.svg)
+
+---
+
+# Computing aligned summary statistics
+
+A similar logic can be applied to matrices (or higher dimensional tensors). For example, one dimension (shifted) is time and another dimension (non shifted) is cell identity:
+
+![](../figures/matrices.svg)
+
+---
+
 
 # Plotting support provided by GroupedErrors
 
@@ -404,7 +423,7 @@ A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable
 
 <iframe src="../mesh_neurons.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-Data and classification from Diogo Matias
+Data and classification from Baylor Brangers and Diogo Matias
 
 ---
 

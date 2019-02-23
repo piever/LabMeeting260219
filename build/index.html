@@ -21,7 +21,7 @@ class: middle, centre
 
 
 
-# What data?
+# What kind of data?
 
 
 The focus will be on tabular data: a set of named columns where each column has a consistent type (string, integer, boolean, date, floating point, complex number, custom type).
@@ -216,8 +216,8 @@ s = StructArray(a = a, b = b, c = c)
 ```
 
 ```
-  3.732 ns (0 allocations: 0 bytes)
-(a = 0.84941494f0, b = false, c = 'c')
+  3.733 ns (0 allocations: 0 bytes)
+(a = 0.005742669f0, b = false, c = 'c')
 ```
 
 
@@ -491,13 +491,13 @@ lead(v, 3)
 
 ```
 10-element ShiftedArrays.ShiftedArray{Float64,Missing,1,Array{Float64,1}}:
- 0.828230072808519
- 0.34232248507752217
- 0.03327183572861747
- 0.12433014805260334
- 0.4501401886305125
- 0.44356386536515235
- 0.4162356632445783
+ 0.38393510372039974
+ 0.8060835292810813
+ 0.6689945738298761
+ 0.6864441496567115
+ 0.17759763429363273
+ 0.47203568620365566
+ 0.7458916887407172
   missing
   missing
   missing
@@ -525,10 +525,10 @@ BenchmarkTools.Trial:
   memory estimate:  32 bytes
   allocs estimate:  1
   --------------
-  minimum time:     4.447 ns (0.00% GC)
-  median time:      5.424 ns (0.00% GC)
-  mean time:        12.100 ns (51.18% GC)
-  maximum time:     4.928 μs (99.59% GC)
+  minimum time:     4.465 ns (0.00% GC)
+  median time:      5.667 ns (0.00% GC)
+  mean time:        14.675 ns (54.49% GC)
+  maximum time:     6.322 μs (99.19% GC)
   --------------
   samples:          10000
   evals/sample:     1000
@@ -555,17 +555,17 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ```
 11×4 Array{Union{Missing, Float64},2}:
- 0.0529484  0.347656   0.432237  0.48407
- 0.471569   0.230826   0.594285  0.210401
- 0.508001   0.0622939  0.951043  0.880317
- 0.238002   0.0142867  0.785623  0.693556
- 0.0325122  0.815732   0.648722  0.916453
- 0.718727   0.433204   0.84345   0.230594
- 0.335605   0.0831777  0.461884  0.840995
- 0.658195   0.749976   0.982013  0.125796
- 0.878772   0.879989   0.20315   0.555088
- 0.31102    0.234569   0.602572   missing
- 0.242324   0.932764   0.14705    missing
+ 0.60413   0.827079  0.208362   0.982685
+ 0.247795  0.428539  0.121445   0.064094
+ 0.880434  0.941468  0.662827   0.673429
+ 0.724049  0.850692  0.164965   0.303081
+ 0.292879  0.921589  0.983653   0.286511
+ 0.601305  0.918222  0.595971   0.052151
+ 0.389686  0.325304  0.0465925  0.610447
+ 0.48186   0.160375  0.493382   0.738308
+ 0.853715  0.577223  0.817028   0.584444
+ 0.830629  0.740185  0.695378    missing
+ 0.456531  0.11425   0.258323    missing
 ```
 
 
@@ -574,7 +574,7 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 
 
-# Adding neural data to a table: ShiftedArrays
+# Computing aligned summary statistics
 
 
 ShiftedArrays also provides utility function to reduce the data:
@@ -586,18 +586,48 @@ reduce_vec(mean, shiftedvecs, -5:5)
 
 ```
 11-element Array{Float64,1}:
- 0.3292279584427404
- 0.3767701982683885
- 0.600413847794448
- 0.43286691592005844
- 0.6033546128564289
- 0.556493880863539
- 0.43041551283662166
- 0.6289949179683707
- 0.6292495507743632
- 0.3827202815663784
- 0.4407129525815834
+ 0.6555640261243809
+ 0.21546837417473758
+ 0.7895393178075014
+ 0.5106968456885431
+ 0.6211578078134659
+ 0.5419120571202425
+ 0.3430072973242362
+ 0.468481124580109
+ 0.7081025814650634
+ 0.7553971908774141
+ 0.27636805271955595
 ```
+
+
+---
+
+
+
+
+# Computing aligned summary statistics
+
+
+```julia
+reduce_vec(mean, shiftedvecs, -5:5)
+```
+
+
+![](../figures/vectors.svg)
+
+
+---
+
+
+
+
+# Computing aligned summary statistics
+
+
+A similar logic can be applied to matrices (or higher dimensional tensors). For example, one dimension (shifted) is time and another dimension (non shifted) is cell identity:
+
+
+![](../figures/matrices.svg)
 
 
 ---
@@ -803,7 +833,7 @@ A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable
 <iframe src="../mesh_neurons.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
 
-Data and classification from Diogo Matias
+Data and classification from Baylor Brangers and Diogo Matias
 
 
 ---

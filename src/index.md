@@ -3,17 +3,17 @@ class: middle, centre
 
 ---
 
-# What data?
+# What kind of data?
 
 The focus will be on tabular data: a set of named columns where each column has a consistent type (string, integer, boolean, date, floating point, complex number, custom type).
 
 In this format, a row correspond to an observation and the various columns are observed quantities.
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Widely used format in data science languages R and Python (data.frame, data.table, pandas).
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Input format of choice for many analysis packages (e.g. generalized linear model toolkits).
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Preferred (only?) supported data format in online databases such as SQL.
 
 ---
@@ -22,15 +22,15 @@ csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 Open source software development for research:
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Efficient format for tabular data
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - User-friendly tools for tabular data manipulations
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Plotting facilities for tabular data (esp. grouped data)
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Custom array type to incorporate photometry or recordings in tables
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Toolkit to build web apps (either locally or on a server) following "data flow"
 
 ---
@@ -52,13 +52,13 @@ Even though in the presentation I will mainly use publicly available example dat
 ---
 
 # The Julia programming language
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Modern, open-source and free programming language
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Easy to use (interactive console, little "boilerplate") but good performance
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Rich type system and multiple dispatch allow for fast custom data structures
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 - Metaprogramming: Julia can modify its own code before running it
 
 ---
@@ -71,13 +71,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -87,11 +87,11 @@ fieldarrays(s) # Data is stored as columns
 
 # StructArrays: technical highlights
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 -  For immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ```@example
 using StructArrays, BenchmarkTools #hide
@@ -102,13 +102,13 @@ s = StructArray(a = a, b = b, c = c)
 @btime $s[3]
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 - Arbitrary column array types are supported:
     - distributed arrays for parallel computing on a cluster
     - cuda arrays to run operations on cuda kernels
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ```julia
 using CuArrays
@@ -149,13 +149,13 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 Pop quiz: this simple operation is very common with our data, how many lines of code would it take in the format you are using? What if you were grouping by more than one column?
 
@@ -215,11 +215,11 @@ In a typical dataset, recordings and behavior are mismatched:
 - Behavioral data => hundreds of rows (trials)
 - Neural data => hundreds of thousands of frames (photometry)
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ```@example 3
 using Statistics #hide
@@ -255,7 +255,7 @@ ShiftedArrays.to_array(shiftedvecs, -5:5)
 
 ---
 
-# Adding neural data to a table: ShiftedArrays
+# Computing aligned summary statistics
 
 ShiftedArrays also provides utility function to reduce the data:
 
@@ -264,6 +264,25 @@ reduce_vec(mean, shiftedvecs, -5:5)
 ```
 
 ---
+
+# Computing aligned summary statistics
+
+```julia
+reduce_vec(mean, shiftedvecs, -5:5)
+```
+
+![](../figures/vectors.svg)
+
+---
+
+# Computing aligned summary statistics
+
+A similar logic can be applied to matrices (or higher dimensional tensors). For example, one dimension (shifted) is time and another dimension (non shifted) is cell identity:
+
+![](../figures/matrices.svg)
+
+---
+
 
 # Plotting support provided by GroupedErrors
 
@@ -307,7 +326,7 @@ plt = Interact.@map scatter(
 )
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ### Layout:
 
@@ -334,7 +353,7 @@ w = Window()
 body!(w, ui)
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 In the browser (for data sharing / interactive presentations either in the lab or in big projects like IBL):
 
@@ -372,7 +391,7 @@ edited_data = dataeditor(filtered_data)
 viewer = dataviewer(edited_data)
 ```
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 ### Layout:
 
@@ -394,7 +413,7 @@ A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable
 - Excellent rendering performance (interactive speed with large datasets)
 - The plot and the UI controls can share signals.
 
-csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
+mltbhfryazqbqenpkqvyyxqgfonygvnhslvpwhktsrzxglboxf
 
 **Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
@@ -404,7 +423,7 @@ csvqcnrmupsfvmzocnlrssvzguwcskzpryximvyfjcgiissmip
 
 <iframe src="../mesh_neurons.mp4" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
-Data and classification from Diogo Matias
+Data and classification from Baylor Brangers and Diogo Matias
 
 ---
 
