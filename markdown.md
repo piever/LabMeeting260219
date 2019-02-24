@@ -382,10 +382,6 @@ All organized in separate tabs.
 ### Widgets and logic:
 
 ```julia
-using JuliaDBMeta, TableWidgets
-filename = filepicker()
-placeholder = table((a = ["Load a real table"],))
-input_data = Interact.@map isempty(&fn) ? placeholder : loadtable(&fn)
 filtered_data = selectors(input_data)
 edited_data = dataeditor(filtered_data)
 viewer = dataviewer(edited_data)
@@ -397,7 +393,6 @@ viewer = dataviewer(edited_data)
 
 ```julia
 tabs = OrderedDict(
-    :filename => filename,
     :filtered_data => filtered_data,
     :edited_data => edited_data,
     :viewer => viewer
