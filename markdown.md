@@ -448,3 +448,5 @@ Video Credits: George Datseris and JuliaDynamics organization
 [TableWidgets](https://github.com/piever/TableWidgets.jl)
 
 [Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html)
+
+[StatsMakie](https://github.com/JuliaPlots/StatsMakie.jl)

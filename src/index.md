@@ -9,11 +9,11 @@ The focus will be on tabular data: a set of named columns where each column has 
 
 In this format, a row correspond to an observation and the various columns are observed quantities.
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Widely used format in data science languages R and Python (data.frame, data.table, pandas).
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Input format of choice for many analysis packages (e.g. generalized linear model toolkits).
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Preferred (only?) supported data format in online databases such as SQL.
 
 ---
@@ -22,15 +22,15 @@ vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
 
 Open source software development for research:
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Efficient format for tabular data
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - User-friendly tools for tabular data manipulations
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Plotting facilities for tabular data (esp. grouped data)
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Custom array type to incorporate photometry or recordings in tables
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Toolkit to build web apps (either locally or on a server) following "data flow"
 
 ---
@@ -52,13 +52,13 @@ Even though in the presentation I will mainly use publicly available example dat
 ---
 
 # The Julia programming language
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Modern, open-source and free programming language
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Easy to use (interactive console, little "boilerplate") but good performance
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Rich type system and multiple dispatch allow for fast custom data structures
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 - Metaprogramming: Julia can modify its own code before running it
 
 ---
@@ -71,13 +71,13 @@ s = StructArray(a=1:3, b=["x", "y", "z"])
 s[1] # Behaves like an array of structures
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ```@example 1
 map(row -> exp(row.a), s) # Behaves like an array of structures
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ```@example 1
 fieldarrays(s) # Data is stored as columns
@@ -87,11 +87,11 @@ fieldarrays(s) # Data is stored as columns
 
 # StructArrays: technical highlights
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 -  For immutable structs (`namedtuple` in Python, non-existent in Matlab) of "plain data types" (i.e. no pointers), row iteration does not allocate
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ```@example
 using StructArrays, BenchmarkTools #hide
@@ -102,13 +102,13 @@ s = StructArray(a = a, b = b, c = c)
 @btime $s[3]
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 - Arbitrary column array types are supported:
     - distributed arrays for parallel computing on a cluster
     - cuda arrays to run operations on cuda kernels
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ```julia
 using CuArrays
@@ -149,13 +149,13 @@ External packages implement normal tabular data operations on `StructArrays` (ma
 @with iris mean(:SepalLength) / mean(:SepalWidth)
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ```@example 2
 @groupby iris :Species (Mean = mean(:SepalLength), STD = std(:SepalWidth))
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 Pop quiz: this simple operation is very common with our data, how many lines of code would it take in the format you are using? What if you were grouping by more than one column?
 
@@ -215,11 +215,11 @@ In a typical dataset, recordings and behavior are mismatched:
 - Behavioral data => hundreds of rows (trials)
 - Neural data => hundreds of thousands of frames (photometry)
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 The package ShiftedArrays addresses this issue by creating a custom array type which is a normal array with a shift:
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ```@example 3
 using Statistics #hide
@@ -326,7 +326,7 @@ plt = Interact.@map scatter(
 )
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ### Layout:
 
@@ -353,7 +353,7 @@ w = Window()
 body!(w, ui)
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 In the browser (for data sharing / interactive presentations either in the lab or in big projects like IBL):
 
@@ -387,7 +387,7 @@ edited_data = dataeditor(filtered_data)
 viewer = dataviewer(edited_data)
 ```
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 ### Layout:
 
@@ -408,7 +408,7 @@ A newer plotting framework ([Makie](http://juliaplots.org/MakieGallery.jl/stable
 - Excellent rendering performance (interactive speed with large datasets)
 - The plot and the UI controls can share signals.
 
-vazfyofefisfcoxibcnnhvahfrjjdtlhnwaahqsglxiawwklcu
+ejyrwdqwqfuowauxxsqfemnafppppgtbrewxyavdgykouklxaz
 
 **Disclaimer**: I've ported the StatsPlots package to StatsMakie but there are still some quirks to iron out before I can switch to using it exclusively.
 
@@ -448,3 +448,5 @@ Video Credits: George Datseris and JuliaDynamics organization
 [TableWidgets](https://github.com/piever/TableWidgets.jl)
 
 [Makie](http://juliaplots.org/MakieGallery.jl/stable/index.html)
+
+[StatsMakie](https://github.com/JuliaPlots/StatsMakie.jl)
